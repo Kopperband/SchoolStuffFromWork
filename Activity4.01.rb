@@ -4,6 +4,7 @@ DeckDict = {}
 DeckValue = []
 DictKey = []
 $pointsInHand = 0
+$dealerPointsInHand = 0
 
 
 def DeckOfCards()
@@ -50,33 +51,99 @@ puts "\n"
 end
 
 def Gameplay()
+  firstDeal = true
+  if firstDeal == true
+    DeckOfCards()
+    firstDeal = false
+  else continue
+  end
+  ShuffleCards()
+  DealCards()
   playerpoints = []
-  card = 1
+  dealerpoints = []
 
+#Need to add a discard pile for when the game ends to clear the dealer and players hand
+
+  card = 1
   point = 0
   while card <= $player.length
     playerpoints += DeckDict.fetch_values($player[point])
     card += 1
     point += 1
   end
-  playerpoints.each {|x| $pointsInHand += x}
-  puts playerpoints
-  puts "test"
-  puts $pointsInHand
-  Hit()
 
+  Dcard = 1
+  Dpoint = 0
+  while Dcard <= $dealer.length
+    dealerpoints += DeckDict.fetch_values($dealer[point])
+    Dcard += 1
+    Dpoint += 1
+  end
+
+  playerpoints.each {|x| $pointsInHand += x}
+  dealerpoints.each {|y| $dealerPointsInHand += y}
+
+  puts "player has #{$player} (#{playerpoints})"
+
+  puts "dealer has #{$dealer[0]}, <other card hidden>"
+ 
+  HorS = true
+  while HorS == true do
+  puts "Do you want to hit or stay?"
+  HitOrStay = gets.chomp.to_s
+   if HitOrStay === "hit"
+    Hit()
+   else
+    HorS = false
+   end
+
+  $playerpoints > 21 ? puts "Player bust", StartGame() : continue 
+  puts "Your cards are now #{$player} (#{playerpoints})"
+  end
+Dealer()
+
+if pointsInHand > dealerPointsInHand
+  puts "Player wins!"
+  StartGame()
+elsif pointsInHand < dealerPointsInHand
+  puts "Dealer wins!"
+  StartGame()
+else pointsInHand == dealerPointsInHand
+  puts "It's a tie!"
+  StartGame()
 
 end
-def Hit()
+
+#Methods for the player and the dealer to hit
+def PlayerHit()
   $player.append(DictKey[0])
   DictKey.shift(1)
   #$pointsInHand += $player.last
 end
+def DealerHit()
+  $dealer.append(DictKey[0])
+  DictKey.shift(1)
+  #$DealerpointsInHand += $dealer.last
+end
 
-DeckOfCards()
-ShuffleCards()
-DealCards()
-Gameplay()
+def Dealer()
+  case $dealerPointsInHand
+    when $dealerPointsInHand < 17
+        DealerHit()
+    else $dealerPointsInHand >= 17
+      continue
+    end
+end
+
+def StartGame()
+  puts "Do you want to play a hand?[y/n]"
+  start = gets.chomp.to_s
+  start === "y" ? Gameplay() : exit!
+end
+
+
+
+StartGame()
 
 puts DictKey.length
 #puts DictKey
