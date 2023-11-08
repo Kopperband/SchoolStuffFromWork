@@ -112,6 +112,8 @@ else pointsInHand == dealerPointsInHand
   puts "It's a tie!"
   StartGame()
 
+puts "Deck has: #{DeckDict.length} cards left"
+
 end
 
 #Methods for the player and the dealer to hit
@@ -136,6 +138,8 @@ def Dealer()
 end
 
 def StartGame()
+  $player.clear()
+  $dealer.clear()
   puts "Do you want to play a hand?[y/n]"
   start = gets.chomp.to_s
   start === "y" ? Gameplay() : exit!
