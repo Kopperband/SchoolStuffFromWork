@@ -20,11 +20,10 @@ class Company
   end
 
   def respond_to_missing?(method_name, include_private = false)
-    method_name.to_s.start_width?('employee') || super
+    method_name.to_s.start_with?('employee') || super
   end
 end
 
 new_employee = Company.new("Akshat", "007", "Tokyo")
 puts new_employee.employee_location
 puts new_employee.respond_to?(:employee_location)
-    
